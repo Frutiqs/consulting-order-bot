@@ -1,25 +1,20 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.fsm.storage.memory import MemoryStorage
-import os
-from dotenv import load_dotenv
+from aiogram import Bot, Dispatcher
+from config import TELEGRAM_BOT_TOKEN
 
-load_dotenv()
+# Создаем бота и диспетчера
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
+dp = Dispatcher(bot)
 
-bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
-dp = Dispatcher(bot, storage=MemoryStorage())
+# Обработчик команды /start
+@dp.message_handler(commands=["start"])
+async def start(message):
+    await message.reply("Привет! Я готов принимать заявки.")
 
-# Команда /start
-@dp.message_handler(commands=['start'])
-async def start(message: types.Message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add("Новая заявка", "Мои заказы")
-    await message.answer("Выберите действие:", reply_markup=keyboard)
+# Асинхронная точка входа
+async def main():
+    print("Бот запущен...")
+    await dp.start_polling()
 
-# Обработка заявки
-@dp.message_handler(text="Новая заявка")
-async def new_request(message: types.Message):
-    await message.answer("Введите описание задачи:")
-
-if __name__ == '__main__':
-    from aiogram import executor
-    executor.start_polling(dp)
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())

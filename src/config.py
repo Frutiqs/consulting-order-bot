@@ -1,9 +1,10 @@
 import os
 from dotenv import load_dotenv
 
-# Загружаем переменные из .env
+# Загрузка переменных из .env
 load_dotenv()
 
+# Получаем токен
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 if not TELEGRAM_BOT_TOKEN:
